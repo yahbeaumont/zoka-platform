@@ -1,0 +1,36 @@
+%%{init: {'theme':'base','themeVariables':{'background':'#0A0A0C','primaryColor':'#17171C','primaryTextColor':'#F2F2F5','primaryBorderColor':'#3A3A44','lineColor':'#7A7A87','fontFamily':'Helvetica, Arial, sans-serif','fontSize':'14px'}}}%%
+flowchart LR
+    subgraph client["Browser"]
+        ui["Next.js App Router\npt · en · es"]
+    end
+    subgraph server["Next.js server · Cloud Run"]
+        rh["Route handlers\nsession · CSRF · authorization"]
+        ai["AI proxy\nintent · quota · streaming"]
+        bill["Billing\nentitlement · webhook"]
+        mod["Moderation\nbatched alerts"]
+    end
+    subgraph data["Managed services"]
+        auth["Firebase Auth"]
+        fs["Firestore\nrules closed by default"]
+        sm["Secret Manager"]
+    end
+    subgraph ext["External providers"]
+        llm["Model providers"]
+        st["Stripe"]
+        rs["E-mail"]
+        vc["Video rooms"]
+    end
+    ui -->|"HttpOnly cookie"| rh
+    rh --> auth
+    rh --> fs
+    rh --> ai
+    rh --> bill
+    rh --> mod
+    ai -->|"server-side"| llm
+    ai --> fs
+    bill --> st
+    bill --> fs
+    mod --> rs
+    ui -.->|"room token"| vc
+    style rh fill:#1A1626,stroke:#7C5CFF,stroke-width:1.5px,color:#F2F2F5
+    style ui fill:#1A1626,stroke:#7C5CFF,stroke-width:1.5px,color:#F2F2F5

@@ -1,0 +1,54 @@
+digraph G {
+  graph [rankdir=LR, bgcolor="#0A0A0C", pad="0.45", nodesep="0.42", ranksep="1.0",
+         fontname="Helvetica", splines=spline, compound=true];
+  node  [shape=box, style="rounded,filled", fillcolor="#17171C", color="#3A3A44",
+         fontcolor="#F2F2F5", fontname="Helvetica", fontsize=13, margin="0.22,0.14",
+         penwidth=1.2, height=0.5];
+  edge  [color="#7A7A87", fontcolor="#9C9CA8", fontname="Helvetica", fontsize=10,
+         arrowsize=0.65, penwidth=1.1];
+
+  subgraph cluster_client {
+    label="Browser";
+    style="rounded,filled"; fillcolor="#101014"; color="#2A2A33";
+    fontcolor="#8E8E9A"; fontsize=11; penwidth=1.1; margin=14; labelloc="b";
+    ui [label="Next.js App Router\npt · en · es", color="#7C5CFF", penwidth=1.7, fillcolor="#1A1626"];
+  }
+  subgraph cluster_server {
+    label="Next.js server · Cloud Run";
+    style="rounded,filled"; fillcolor="#101014"; color="#2A2A33";
+    fontcolor="#8E8E9A"; fontsize=11; penwidth=1.1; margin=14; labelloc="b";
+    rh [label="Route handlers\nsession · CSRF · authorization", color="#7C5CFF", penwidth=1.7, fillcolor="#1A1626"];
+    ai [label="AI proxy\nintent · quota · streaming"];
+    bill [label="Billing\nentitlement · webhook"];
+    mod [label="Moderation\nbatched alerts"];
+  }
+  subgraph cluster_data {
+    label="Managed services";
+    style="rounded,filled"; fillcolor="#101014"; color="#2A2A33";
+    fontcolor="#8E8E9A"; fontsize=11; penwidth=1.1; margin=14; labelloc="b";
+    auth [label="Firebase Auth"];
+    fs [label="Firestore\nrules closed by default"];
+    sm [label="Secret Manager"];
+  }
+  subgraph cluster_ext {
+    label="External providers";
+    style="rounded,filled"; fillcolor="#101014"; color="#2A2A33";
+    fontcolor="#8E8E9A"; fontsize=11; penwidth=1.1; margin=14; labelloc="b";
+    llm [label="Model providers"];
+    st [label="Stripe"];
+    rs [label="E-mail"];
+    vc [label="Video rooms"];
+  }
+  ui -> rh [label="HttpOnly cookie"];
+  rh -> auth;
+  rh -> fs;
+  rh -> ai;
+  rh -> bill;
+  rh -> mod;
+  ai -> llm [label="server-side"];
+  ai -> fs;
+  bill -> st;
+  bill -> fs;
+  mod -> rs;
+  ui -> vc [label="room token", style=dashed];
+}

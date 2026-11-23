@@ -1,0 +1,35 @@
+sequenceDiagram
+    autonumber
+    participant B as Browser
+    participant R as Route handler
+    participant Q as Quota store
+    participant P as AI proxy
+    participant M as Model provider
+    participant F as Firestore
+
+    B->>R: POST question (session cookie, CSRF)
+    R->>R: resolve session, membership, role
+    R->>Q: reserve slot (transaction, hourly window)
+    alt quota exceeded
+        Q-->>R: QUOTA_EXCEEDED
+        R-->>B: 429 with reset time
+    else reserved
+        Q-->>R: reservation held
+        R->>P: normalised request
+        P->>P: classify intent (search only if current)
+        P->>M: open stream
+        alt failure before first token
+            M-->>P: error
+            P->>Q: release reservation
+            P-->>R: typed failure (policy, rate, unavailable)
+            R-->>B: error, draft preserved, quota not consumed
+        else stream started
+            loop deltas
+                M-->>P: token
+                P-->>B: event delta
+            end
+            P->>Q: settle (idempotent)
+            P->>F: persist message and quota effect
+            P-->>B: event done
+        end
+    end

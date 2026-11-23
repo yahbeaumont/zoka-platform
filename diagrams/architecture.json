@@ -1,0 +1,134 @@
+{
+  "rankdir": "LR",
+  "accent": "#7C5CFF",
+  "clusters": [
+    {
+      "id": "client",
+      "label": "Browser",
+      "nodes": [
+        {
+          "id": "ui",
+          "label": "Next.js App Router\\npt \u00b7 en \u00b7 es",
+          "accent": true
+        }
+      ]
+    },
+    {
+      "id": "server",
+      "label": "Next.js server \u00b7 Cloud Run",
+      "nodes": [
+        {
+          "id": "rh",
+          "label": "Route handlers\\nsession \u00b7 CSRF \u00b7 authorization",
+          "accent": true
+        },
+        {
+          "id": "ai",
+          "label": "AI proxy\\nintent \u00b7 quota \u00b7 streaming"
+        },
+        {
+          "id": "bill",
+          "label": "Billing\\nentitlement \u00b7 webhook"
+        },
+        {
+          "id": "mod",
+          "label": "Moderation\\nbatched alerts"
+        }
+      ]
+    },
+    {
+      "id": "data",
+      "label": "Managed services",
+      "nodes": [
+        {
+          "id": "auth",
+          "label": "Firebase Auth"
+        },
+        {
+          "id": "fs",
+          "label": "Firestore\\nrules closed by default"
+        },
+        {
+          "id": "sm",
+          "label": "Secret Manager"
+        }
+      ]
+    },
+    {
+      "id": "ext",
+      "label": "External providers",
+      "nodes": [
+        {
+          "id": "llm",
+          "label": "Model providers"
+        },
+        {
+          "id": "st",
+          "label": "Stripe"
+        },
+        {
+          "id": "rs",
+          "label": "E-mail"
+        },
+        {
+          "id": "vc",
+          "label": "Video rooms"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "ui",
+      "to": "rh",
+      "label": "HttpOnly cookie"
+    },
+    {
+      "from": "rh",
+      "to": "auth"
+    },
+    {
+      "from": "rh",
+      "to": "fs"
+    },
+    {
+      "from": "rh",
+      "to": "ai"
+    },
+    {
+      "from": "rh",
+      "to": "bill"
+    },
+    {
+      "from": "rh",
+      "to": "mod"
+    },
+    {
+      "from": "ai",
+      "to": "llm",
+      "label": "server-side"
+    },
+    {
+      "from": "ai",
+      "to": "fs"
+    },
+    {
+      "from": "bill",
+      "to": "st"
+    },
+    {
+      "from": "bill",
+      "to": "fs"
+    },
+    {
+      "from": "mod",
+      "to": "rs"
+    },
+    {
+      "from": "ui",
+      "to": "vc",
+      "label": "room token",
+      "style": "dashed"
+    }
+  ]
+}
